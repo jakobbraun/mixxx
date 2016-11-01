@@ -50,6 +50,7 @@
 #include "playermanager.h"
 #include "recording/defs_recording.h"
 #include "recording/recordingmanager.h"
+#include "oscClient/oscClientManager.h"
 #include "shoutcast/shoutcastmanager.h"
 #include "skin/legacyskinparser.h"
 #include "skin/skinloader.h"
@@ -96,6 +97,7 @@ MixxxMainWindow::MixxxMainWindow(QApplication* pApp, const CmdlineArgs& args)
         : m_pWidgetParent(NULL),
           m_pSoundManager(NULL),
           m_pRecordingManager(NULL),
+          m_pOscClientManager(NULL),
 #ifdef __SHOUTCAST__
           m_pShoutcastManager(NULL),
 #endif
@@ -524,6 +526,8 @@ void MixxxMainWindow::initalize(QApplication* pApp, const CmdlineArgs& args) {
             SIGNAL(currentPlayingTrackChanged(TrackPointer)),
             this, SLOT(slotUpdateWindowTitle(TrackPointer)));
 
+    m_pOscClientManager = new OscClientManager(m_pConfig, m_pEngine);
+
     // this has to be after the OpenGL widgets are created or depending on a
     // million different variables the first waveform may be horribly
     // corrupted. See bug 521509 -- bkgood ?? -- vrince
@@ -590,6 +594,8 @@ void MixxxMainWindow::finalize() {
     // RecordingManager depends on config, engine
     qDebug() << "delete RecordingManager " << qTime.elapsed();
     delete m_pRecordingManager;
+
+    delete m_pOscClientManager;
 
 #ifdef __SHOUTCAST__
     // ShoutcastManager depends on config, engine

@@ -22,6 +22,12 @@ class PortAudio(Dependence):
     def sources(self, build):
         return ['sounddeviceportaudio.cpp']
 
+class LibLo(Dependence):
+    def configure(self, build, conf):
+        libs = ['lo']
+        
+        if not conf.CheckLib(libs):
+            raise Exception("Did not find liblo")
 
 class PortMIDI(Dependence):
 
@@ -781,6 +787,9 @@ class MixxxCore(Feature):
                    "dlgrecording.cpp",
                    "recording/recordingmanager.cpp",
                    "engine/sidechain/enginerecord.cpp",
+                   
+                   "oscClient/oscClientManager.cpp",
+                   "engine/sidechain/engineOscClient.cpp",
 
                    # External Library Features
                    "library/baseexternallibraryfeature.cpp",
@@ -922,6 +931,7 @@ class MixxxCore(Feature):
                    "soundmanagerconfig.cpp",
                    "soundmanagerutil.cpp",
                    "dlgprefrecord.cpp",
+                   "dlgprefosc.cpp",
                    "playerinfo.cpp",
                    "visualplayposition.cpp",
 
@@ -991,6 +1001,7 @@ class MixxxCore(Feature):
             'dlgprefnovinyldlg.ui',
             'dlgpreflibrarydlg.ui',
             'dlgprefrecorddlg.ui',
+            'dlgprefoscdlg.ui',
             'dlgprefreplaygaindlg.ui',
             'dlgprefsounddlg.ui',
             'dlgprefsounditem.ui',
@@ -1203,7 +1214,7 @@ class MixxxCore(Feature):
     def depends(self, build):
         return [SoundTouch, ReplayGain, PortAudio, PortMIDI, Qt, TestHeaders,
                 FidLib, SndFile, FLAC, OggVorbis, OpenGL, TagLib, ProtoBuf,
-                Chromaprint, RubberBand, SecurityFramework, CoreServices, FpClassify]
+                Chromaprint, RubberBand, SecurityFramework, CoreServices, FpClassify, LibLo]
 
     def post_dependency_check_configure(self, build, conf):
         """Sets up additional things in the Environment that must happen

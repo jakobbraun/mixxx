@@ -35,6 +35,7 @@ class ControllerManager;
 class MixxxKeyboard;
 class PlayerManager;
 class RecordingManager;
+class OscClientManager;
 class ShoutcastManager;
 class SkinLoader;
 class EffectsManager;
@@ -216,6 +217,8 @@ class MixxxMainWindow : public QMainWindow {
     PlayerManager* m_pPlayerManager;
     // RecordingManager
     RecordingManager* m_pRecordingManager;
+    //oscClientManager
+    OscClientManager* m_pOscClientManager;
 #ifdef __SHOUTCAST__
     ShoutcastManager* m_pShoutcastManager;
 #endif
